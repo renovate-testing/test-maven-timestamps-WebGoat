@@ -18,8 +18,8 @@ jobs:
       run: mvn clean install -DskipTests=true
     - name: WhiteSource Prioritize Scan
       env:
-        #WS_APIKEY: ${{secrets.APIKEY}}
-        WS_USERKEY: ${{secrets.USERKEY}}
+        WS_APIKEY: ${{secrets.APIKEY}}
+        #WS_USERKEY: ${{secrets.USERKEY}}
       run: |
         curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
         echo UA downloaded successfully
