@@ -14,6 +14,21 @@
   },
   "remediateSettings": {
     "enableRenovate": "true",
-    "extends": ["github>whitesource/merge-confidence:beta"]
+    "extends": ["github>whitesource/merge-confidence:beta",
+      ":separateMajorReleases",
+      ":combinePatchMinorReleases",
+      ":ignoreUnstable",
+      ":prImmediately",
+      ":semanticPrefixFixDepsChoreOthers",
+      ":updateNotScheduled",
+      ":automergeDisabled",
+      ":ignoreModulesAndTests",
+      ":autodetectPinVersions",
+      ":prHourlyLimit2",
+      ":prConcurrentLimit20",
+      "group:monorepos",
+      "group:recommended",
+      "helpers:disableTypesNodeMajor",
+      "workarounds:all"]   
   }
 }
