@@ -1,0 +1,32 @@
+name: Whitesource Prioritize Java with Maven
+
+on:
+  push:
+  
+jobs:
+  WhiteSource-Prioritize:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Build with Maven
+      run: mvn clean install -DskipTests=true
+    - name: WhiteSource Prioritize Scan
+      env:
+        WS_APIKEY: ${{secrets.APIKEY}}
+      run: |
+        curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
+        echo UA downloaded successfully
+        WARFILE=$(find ./ -type f -wholename "*/target/*.war")
+        export WS_ENABLEIMPACTANALYSIS=true
+        export WS_REQUIREKNOWNSHA1=false
+        export WS_RESOLVEALLDEPENDENCIES=false
+        export WS_MAVEN_RESOLVEDEPENDENCIES=true
+        export WS_MAVEN_AGGREGATEMODULES=true
+        export WS_INCLUDES='**/*c **/*cc **/*cp **/*cpp **/*cxx **/*c++ **/*h **/*hh **/*hpp **/*hxx **/*h++ **/*m **/*mm **/*pch **/*c# **/*cs **/*csharp **/*go **/*goc **/*js **/*pl **/*plx **/*pm **/*ph **/*cgi **/*fcgi **/*pod **/*psgi **/*al **/*perl **/*t **/*pl6 **/*p6m **/*p6l **/*pm6 **/*nqp **/*6pl **/*6pm **/*p6 **/*php **/*py **/*rb **/*swift **/*java **/*clj **/*cljx **/*cljs **/*cljc **/*jar **/*egg **/*dll **/*tar.gz **/*tgz **/*zip **/*whl **/*gem **/*apk **/*air **/*dmg **/*exe **/*gem **/*gzip **/*msi **/*nupkg **/*swc **/*swf **/tar.bz2 **/pkg.tar.xz **/(u)?deb **/(a)?rpm'
+        java -jar wss-unified-agent.jar -appPath $WARFILE -d ./ -product GH_${{ github.event.repository.name }} -project ${{ github.ref }}_Prioritize
